@@ -5,8 +5,12 @@ from queue import Queue
 
 
 def getDependencies(Task):
+<<<<<<< Updated upstream
      for getName in dico :
         print(dico[getName])
+=======
+        print(dico[Task.name])
+>>>>>>> Stashed changes
 
 
 
@@ -95,7 +99,7 @@ for k,v in dico.items():
 	print("Nom de la tâche: {} - précédences : {}".format(k,v))
 
 
-getDependencies(t1)
+getDependencies(tSomme)
 
 
 t1.run()
