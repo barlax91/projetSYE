@@ -5,12 +5,7 @@ from queue import Queue
 
 
 def getDependencies(Task):
-<<<<<<< Updated upstream
-     for getName in dico :
-        print(dico[getName])
-=======
         print(dico[Task.name])
->>>>>>> Stashed changes
 
 
 
