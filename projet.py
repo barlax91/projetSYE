@@ -6,7 +6,7 @@ from queue import Queue
 
 def getDependencies(Task):
      for getName in dico :
-        print(getName,dico[k])
+        print(dico[getName])
 
 
 
@@ -74,12 +74,14 @@ t1.writes = ["X"]
 t1.run = runT1
 listTask.append(t1.name)
 dico[t1.name]=t1.reads
+
 t2 = Task()
 t2.name = "T2"
 t2.writes = ["Y"]
 t2.run = runT2
 listTask.append(t2.name)
 dico[t2.name]=t2.reads
+
 tSomme = Task()
 tSomme.name = "somme"
 tSomme.reads = ["X", "Y"]
@@ -106,6 +108,3 @@ print(Z)
 print(listTask)
 #affiche le dictionnaire
 print(dico.items())
-
-
-
