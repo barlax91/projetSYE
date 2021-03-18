@@ -1,4 +1,4 @@
-__author__ = 'ben'
+__author__ = 'ben' 'elvir'
 
 from threading import Thread
 from queue import Queue
