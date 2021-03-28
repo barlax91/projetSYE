@@ -4,16 +4,42 @@ from threading import Thread
 from queue import Queue
 
 class TaskSystem():
-    def getDependencies(Task):
-       listTaskDependencies = list()
-       listTaskDependencies.append()
-       print(listTaskDependencies)
 
-    def estdiff(v1,v2):
-        if (v1 == v2):
-            return v1
-        return None
+    def __init__(self,listTask,dico,dicofinal):
+        self.listTask = listTask
+        self.dico = dico
+        self.dicofinal =dicofinal
 
+    def getDependencies(self,Tnom,dicofinal):
+        dicofinal[Tnom.name] = ""
+        for i in dico[Tnom.name]:
+            for j in listTask:
+                if(j.name == i):
+                    if(self.estinter(nomTache,j)==True):
+                        dicofinal[Tnom.name]+=i
+
+
+    def run(self):
+        #àfaire
+        print()
+
+    # on cherche si les fonctions sont interférentes en utilisant les conditions de bernstein
+    def estinter(self,task1,task2):
+        for i in task1.writes:
+            for j in task2.writes:
+                if i==j:
+                    return True
+
+        for i in task1.reads:
+            for j in task2.writes:
+                if i == j:
+                    return True
+
+        for i in task1.writes:
+            for j in task2.reads:
+                if i == j:
+                    return True
+        return false
 
 
 
@@ -47,79 +73,70 @@ class Task:
     def getWrites(self):
         return self.writes
 
-    def estdep(task1, task2):
-        """on vérifie si 2 taches sont indépendantes l'une de l'autre en utilisant les conditions de Bernstein"""
-        return (TaskSystem.estdiff(task1.reads, task2.writes)
-                and TaskSystem.estdiff(task1.writes, task2.reads)
-                and TaskSystem.estdiff(task1.writes, task2.writes))
 
 
 X = None
 Y = None
 Z = None
 
-
+#execution de la tache T1
 def runT1():
     global X
     X = 1
 
-
+#execution de la tache T2
 def runT2():
     global Y
     Y = 4
 
-
+#execution de la tache Tsomme
 def runTsomme():
-    global X, Y, Z
+    global Z
     Z = X + Y
 
 
-# liste des taches
-listTask = list()
-# dictionnaire
-dicor = dict({})
-dicow = dict({})
-
+# initialisation de tâches pour faire des tests
 t1 = Task()
 t1.name = "T1"
 t1.writes = ["X"]
 t1.run = runT1
-listTask.append(t1.name)
-dicor[t1.name] = t1.reads
-dicow[t1.name] = t1.writes
+
 
 t2 = Task()
 t2.name = "T2"
 t2.writes = ["Y"]
 t2.run = runT2
-listTask.append(t2.name)
-dicor[t2.name] = t2.reads
-dicow[t2.name] = t2.writes
+
 
 tSomme = Task()
 tSomme.name = "somme"
 tSomme.reads = ["X", "Y"]
 tSomme.writes = ["Z"]
 tSomme.run = runTsomme
-listTask.append(tSomme.name)
-dicor[tSomme.name] = tSomme.reads
-dicow[tSomme.name] = tSomme.writes
 
 
-for k, v in dicor.items():
-    print("Nom de la tâche: {} - lectures : {}".format(k, v))
-for k,v in dicow.items():
-    print("nom tache : {} - écritures : {}".format(k,v))
+# liste des taches
+listTask = [t1,t2,tSomme]
+# dictionnaire
+dico = {"T1":[],"T2":["T1"],"somme":["T1","T2"]}
+#
+dicofinal={}
+
+#s1 = TaskSystem(listTask,estinter,dicofinal)
+
+
+TaskSystem.getDependencies(t2,"T2",dicofinal)
 t1.run()
 t2.run()
 tSomme.run()
 print(X)
 print(Y)
 print(Z)
-# affiche la liste des tâches
-print(listTask)
-# affiche le dictionnaire
-print(dicor.items())
-print(dicow.items())
 
-TaskSystem.getDependencies(t2)
+
+# affiche le dictionnaire des reads et writes
+print(dico.items())
+print(dicofinal.items())
+
+
+
