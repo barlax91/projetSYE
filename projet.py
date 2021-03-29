@@ -1,6 +1,6 @@
 __author__ = 'ben' 'elvir' 'barou'
 
-from threading import Thread
+from threading import *
 from queue import Queue
 
 
@@ -21,8 +21,9 @@ class TaskSystem:
                         dicofinal[Tnom.name] += i
 
     def run(self):
-        #àfaire
-        print()
+        while True:
+            # executer la tache
+            self.queue.task_done()
 
     # on cherche si les fonctions sont interférentes en utilisant les conditions de bernstein
     def estinter(self,task1,task2):
@@ -97,6 +98,11 @@ def runTsomme():
     Z = X + Y
 
 
+def runTdifference():
+    global X,Z,D
+    D = X - Z
+
+
 # liste des taches
 listTask = list()
 
@@ -108,13 +114,11 @@ t1.writes = ["X"]
 t1.run = runT1
 listTask.append(t1)
 
-
 t2 = Task()
 t2.name = "T2"
 t2.writes = ["Y"]
 t2.run = runT2
 listTask.append(t2)
-
 
 tSomme = Task()
 tSomme.name = "somme"
@@ -123,10 +127,15 @@ tSomme.writes = ["Z"]
 tSomme.run = runTsomme
 listTask.append(tSomme)
 
+tDifference = Task()
+tDifference.name = "difference"
+tDifference.reads = ["X","Z"]
+tDifference.writes = ["D"]
+tDifference.run = runTdifference
+listTask.append(tDifference)
 
 # dictionnaire
-dico = {"T1":[],"T2":["T1"],"somme":["T1","T2"]}
-#
+dico = {"T1":[],"T2":["T1"],"somme":["T1","T2"],"difference":["T1","somme"]}
 dicofinal={}
 
 s1 = TaskSystem(listTask,dicofinal)
@@ -135,9 +144,11 @@ s1 = TaskSystem(listTask,dicofinal)
 t1.run()
 t2.run()
 tSomme.run()
+tDifference.run()
 print(X)
 print(Y)
 print(Z)
+print(D)
 
 
 # affiche le dictionnaire initial
