@@ -3,44 +3,45 @@ __author__ = 'ben' 'elvir' 'barou'
 from threading import Thread
 from queue import Queue
 
-class TaskSystem():
+class TaskSystem:
 
     def __init__(self,listTask,dico,dicofinal):
         self.listTask = listTask
         self.dico = dico
         self.dicofinal =dicofinal
 
+        self.getDependencies(t1,dicofinal)
+
     def getDependencies(self,Tnom,dicofinal):
         dicofinal[Tnom.name] = ""
         for i in dico[Tnom.name]:
             for j in listTask:
                 if(j.name == i):
-                    if(self.estinter(nomTache,j)==True):
-                        dicofinal[Tnom.name]+=i
-
+                    if self.estinter(Tnom, j) == True:
+                        dicofinal[Tnom.name] += i
 
     def run(self):
         #àfaire
         print()
 
+
     # on cherche si les fonctions sont interférentes en utilisant les conditions de bernstein
-    def estinter(self,task1,task2):
-        for i in task1.writes:
-            for j in task2.writes:
-                if i==j:
-                    return True
+def estinter(self,task1,task2):
+    for i in task1.writes:
+        for j in task2.writes:
+            if i == j:
+                return True
 
-        for i in task1.reads:
-            for j in task2.writes:
-                if i == j:
-                    return True
+    for i in task1.reads:
+        for j in task2.writes:
+            if i == j:
+                return True
 
-        for i in task1.writes:
-            for j in task2.reads:
-                if i == j:
-                    return True
-        return false
-
+    for i in task1.writes:
+        for j in task2.reads:
+            if i == j:
+                return True
+    return false
 
 
 '''
@@ -91,8 +92,12 @@ def runT2():
 
 #execution de la tache Tsomme
 def runTsomme():
-    global Z
+    global X,Y,Z
     Z = X + Y
+
+
+# liste des taches
+listTask = list()
 
 
 # initialisation de tâches pour faire des tests
@@ -100,12 +105,14 @@ t1 = Task()
 t1.name = "T1"
 t1.writes = ["X"]
 t1.run = runT1
+listTask.append(t1)
 
 
 t2 = Task()
 t2.name = "T2"
 t2.writes = ["Y"]
 t2.run = runT2
+listTask.append(t2)
 
 
 tSomme = Task()
@@ -113,19 +120,17 @@ tSomme.name = "somme"
 tSomme.reads = ["X", "Y"]
 tSomme.writes = ["Z"]
 tSomme.run = runTsomme
+listTask.append(tSomme)
 
 
-# liste des taches
-listTask = [t1,t2,tSomme]
 # dictionnaire
 dico = {"T1":[],"T2":["T1"],"somme":["T1","T2"]}
 #
 dicofinal={}
 
-#s1 = TaskSystem(listTask,estinter,dicofinal)
+s1 = TaskSystem(listTask,estinter,dicofinal)
 
 
-TaskSystem.getDependencies(t2,"T2",dicofinal)
 t1.run()
 t2.run()
 tSomme.run()
