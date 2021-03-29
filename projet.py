@@ -17,7 +17,7 @@ class TaskSystem:
         for i in dico[Tnom.name]:
             for j in listTask:
                 if j.name == i:
-                    if self.estinter(Tnom, j) == True:
+                    if self.estinter(Tnom, j):
                         dicofinal[Tnom.name] += i
 
     def run(self):
@@ -72,7 +72,6 @@ class Task:
 
     def getWrites(self):
         return self.writes
-
 
 
 X = None
@@ -141,8 +140,9 @@ print(Y)
 print(Z)
 
 
-# affiche le dictionnaire des reads et writes
+# affiche le dictionnaire initial
 print(dico.items())
+# affiche le dictionnaire final
 print(dicofinal.items())
 
 
