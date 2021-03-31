@@ -2,8 +2,10 @@ __author__ = 'ben' 'elvir' 'barou'
 
 import threading
 import time
+import queue
 
 exitFlag = 0
+
 
 class TaskSystem(threading.Thread):
 
@@ -26,14 +28,20 @@ class TaskSystem(threading.Thread):
                     if self.estinter(Tnom, j):
                         dicofinal[Tnom.name] += i
 
-    def run(self):
-        print("Starting" + self.name)
-        process_data(self.name)
-        print("Ending"+ self.name)
+    def run(self,listTask,dico,dicofinal):
+        while not exitFlag:
+            print("Starting" + self.name)
+            t1 = threading.Thread(target=runT1(),args=())
+            t2 = threading.Thread(target=runT2(), args=())
+            tsomme = threading.Thread(target=runTsomme(), args=())
+            tdiff = threading.Thread(target=runTdifference(), args=())
+            t1.start()
+            t2.start()
+            tsomme.start()
+            tdiff.start()
 
-
-    def process_data(nomThread):
-            time.sleep(2)
+            print("Ending" + self.name)
+        time.sleep(2)
 
     # on cherche si les fonctions sont interférentes en utilisant les conditions de bernstein
     def estinter(self,task1,task2):
@@ -152,7 +160,7 @@ listTask.append(tDifference)
 dico = {"T1":[],"T2":["T1"],"somme":["T1","T2"],"difference":["T1","T2"]}
 dicofinal={}
 
-s1 = TaskSystem(1,listTask,dicofinal)
+s1 = TaskSystem(0,listTask,dicofinal)
 
 
 t1.run()
