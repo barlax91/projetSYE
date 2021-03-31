@@ -1,17 +1,23 @@
 __author__ = 'ben' 'elvir' 'barou'
 
-from threading import *
-from queue import Queue
+import threading
+import time
 
+exitFlag = 0
 
-class TaskSystem:
+class TaskSystem(threading.Thread):
 
-    def __init__(self,listTask,dicofinal):
+    def __init__(self,threadID,listTask,dicofinal):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
         self.listTask = listTask
         self.dicofinal = dicofinal
+        # pour chaque tâche présente dans la liste des tâches on appelle la fonction getDependencies
         for i in listTask:
             self.getDependencies(i,dicofinal)
 
+    # la fonction getDependencies récupère les nom des tâches interférentes et
+    # les ajoute dans le dicofinal(dictionnaire des interférences)
     def getDependencies(self,Tnom,dicofinal):
         dicofinal[Tnom.name] = ""
         for i in dico[Tnom.name]:
@@ -21,9 +27,13 @@ class TaskSystem:
                         dicofinal[Tnom.name] += i
 
     def run(self):
-        while True:
-            # executer la tache
-            self.queue.task_done()
+        print("Starting" + self.name)
+        process_data(self.name)
+        print("Ending"+ self.name)
+
+
+    def process_data(nomThread):
+            time.sleep(2)
 
     # on cherche si les fonctions sont interférentes en utilisant les conditions de bernstein
     def estinter(self,task1,task2):
@@ -84,23 +94,27 @@ Z = None
 def runT1():
     global X
     X = 1
+    print("t1exe")
 
 
 # execution de la tache T2
 def runT2():
     global Y
     Y = 4
+    print("t2exe")
 
 
 # execution de la tache Tsomme
 def runTsomme():
     global X,Y,Z
     Z = X + Y
+    print("tsommeexe")
 
 
 def runTdifference():
-    global X,Z,D
-    D = X - Z
+    global X,Y,D
+    D = X - Y
+    print("tdiffexe")
 
 
 # liste des taches
@@ -129,16 +143,16 @@ listTask.append(tSomme)
 
 tDifference = Task()
 tDifference.name = "difference"
-tDifference.reads = ["X","Z"]
+tDifference.reads = ["X","Y"]
 tDifference.writes = ["D"]
 tDifference.run = runTdifference
 listTask.append(tDifference)
 
 # dictionnaire
-dico = {"T1":[],"T2":["T1"],"somme":["T1","T2"],"difference":["T1","somme"]}
+dico = {"T1":[],"T2":["T1"],"somme":["T1","T2"],"difference":["T1","T2"]}
 dicofinal={}
 
-s1 = TaskSystem(listTask,dicofinal)
+s1 = TaskSystem(1,listTask,dicofinal)
 
 
 t1.run()
