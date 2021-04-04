@@ -1,0 +1,10 @@
+digraph "Systeme de taches" {
+	T1 [label=T1]
+	T2 [label=T2]
+	somme [label=somme]
+	difference [label=difference]
+	somme -> T1
+	somme -> T2
+	difference -> T1
+	difference -> T2
+}
