@@ -26,14 +26,6 @@ class TaskSystem:
         self.draw_ = listTask
         self.verifinter()
 
-    # listTask getter
-    def listTask(self):
-        return self.listTask_
-    
-    # listTask setter
-    def listTask(self):
-        return self.listTask_
-
     def __new__(cls, listTask, dico):
         # Test s'il ya des duplications
         if len(listTask) != len(set([i.name for i in listTask])):
@@ -71,7 +63,7 @@ class TaskSystem:
                     if v.get('task') == item[1]:
                         v['preferences'] = self.getDependencies(item[1].name)
         self.listTask_ = resultat
-        # on copie également ce résultat pour l'affichage du système ensuite
+        # on copie également ce résultat de manière récursive pour l'affichage du système ensuite
         self.draw_ = copy.deepcopy(resultat)
 
     def run(self):
