@@ -139,7 +139,7 @@ class TaskSystem:
             # création des edges(flèches) en fonction des préferences
         for i in self.draw_:
             for preference in i.get('preferences'):
-                dot.edge(i.get('task').name, preference)
+                dot.edge(preference,i.get('task').name)
         # affichage
         dot.render("Systeme de tâches")
         print('draw done')

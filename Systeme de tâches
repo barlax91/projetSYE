@@ -3,8 +3,8 @@ digraph "Systeme de taches" {
 	T2 [label=T2]
 	somme [label=somme]
 	difference [label=difference]
-	somme -> T1
-	somme -> T2
-	difference -> T1
-	difference -> T2
+	T1 -> somme
+	T2 -> somme
+	T1 -> difference
+	T2 -> difference
 }
